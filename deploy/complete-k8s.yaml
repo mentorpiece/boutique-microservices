@@ -803,7 +803,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/boutique-currencyservice:v0.1.0
+        image: gnado/boutique-currencyservice:v0.1.1
         ports:
         - name: grpc
           containerPort: 7000

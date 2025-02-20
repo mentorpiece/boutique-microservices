@@ -950,7 +950,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/boutique-adservice:v0.1.0 
+        image: gnado/boutique-adservice:v0.1.3
         ports:
         - containerPort: 9555
         env:

@@ -106,7 +106,9 @@ public final class AdService {
         }
         if (allAds.isEmpty()) {
           // Serve random ads.
-          allAds = service.getRandomAds();
+          // allAds = service.getRandomAds();
+          logger.log(Level.ERROR, "Ads not found by context words");
+          System.exit(1);
         }
         AdResponse reply = AdResponse.newBuilder().addAllAds(allAds).build();
         responseObserver.onNext(reply);
@@ -188,7 +190,7 @@ public final class AdService {
         .putAll("footwear", loafers)
         .putAll("hair", hairdryer)
         .putAll("decor", candleHolder)
-        .putAll("kitchen", bambooGlassJar, mug)
+        // .putAll("kitchen", bambooGlassJar, mug)
         .build();
   }
 

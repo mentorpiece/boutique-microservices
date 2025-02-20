@@ -284,7 +284,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: gnado/frontend:v0.0.6
+          image: gnado/boutique-frontend:v0.1.0
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -430,7 +430,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/paymentservice:v0.0.1
+        image: gnado/boutique-paymentservice:v0.1.0
         ports:
         - containerPort: 50051
         env:
@@ -503,7 +503,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/productcatalogservice:v0.0.8
+        image: gnado/boutique-productcatalogservice:v0.1.0
         ports:
         - containerPort: 3550
         env:
@@ -576,7 +576,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/cartservice:v0.0.6
+        image: gnado/boutique-cartservice:v0.1.0
         ports:
         - containerPort: 7070
         env:
@@ -803,7 +803,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/currencyservice:v0.0.4
+        image: gnado/boutique-currencyservice:v0.1.0
         ports:
         - name: grpc
           containerPort: 7000
@@ -876,7 +876,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/shippingservice:v0.0.3
+        image: gnado/boutique-shippingservice:v0.1.0
         ports:
         - containerPort: 50051
         env:
@@ -950,7 +950,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/adservice:v0.10.2
+        image: gnado/boutique-adservice:v0.1.0 
         ports:
         - containerPort: 9555
         env:

@@ -269,10 +269,10 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		Items:              prep.orderItems,
 	}
 
-	if err := cs.sendOrderConfirmation(ctx, req.Email, orderResult); err != nil {
-		log.Warnf("failed to send order confirmation to %q: %+v", req.Email, err)
+	if err := cs.sendOrderConfirmation(ctx, "someone@example.com", orderResult); err != nil {
+		log.Warnf("failed to send order confirmation to %q: %+v", "someone@example.com", err)
 	} else {
-		log.Infof("order confirmation email sent to %q", req.Email)
+		log.Infof("order confirmation email sent to %q", "someone@example.com")
 	}
 	resp := &pb.PlaceOrderResponse{Order: orderResult}
 	return resp, nil

@@ -24,6 +24,7 @@ import (
 	"sync"
 	"syscall"
 	"time"
+	"strings"
 
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/productcatalogservice/genproto"
 	"google.golang.org/grpc/credentials/insecure"
@@ -62,6 +63,7 @@ func init() {
 	}
 	log.Out = os.Stdout
 	catalogMutex = &sync.Mutex{}
+	log.SetLevel(logrus.TraceLevel)
 }
 
 func main() {
@@ -131,8 +133,15 @@ func run(port string) string {
 			propagation.TraceContext{}, propagation.Baggage{}))
 	var srv *grpc.Server
 	srv = grpc.NewServer(
-		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
-		grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()))
+		grpc.ChainUnaryInterceptor(
+			loggingUnaryInterceptor,
+			otelgrpc.UnaryServerInterceptor(),
+		),
+		grpc.ChainStreamInterceptor(
+			loggingStreamInterceptor,
+			otelgrpc.StreamServerInterceptor(),
+		),
+	)
 
 	svc := &productCatalog{}
 	err = loadCatalog(&svc.catalog)
@@ -214,4 +223,47 @@ func mustConnGRPC(ctx context.Context, conn **grpc.ClientConn, addr string) {
 	if err != nil {
 		panic(errors.Wrapf(err, "grpc: failed to connect %s", addr))
 	}
+}
+
+func loggingUnaryInterceptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	handler grpc.UnaryHandler,
+) (interface{}, error) {
+	if strings.HasPrefix(info.FullMethod, "/grpc.health.v1.Health/") {
+		return handler(ctx, req)
+	}
+	start := time.Now()
+	log.Tracef("Received gRPC request: method=%s, request=%+v", info.FullMethod, req)
+
+	resp, err := handler(ctx, req)
+
+	duration := time.Since(start)
+	if err != nil {
+		log.Errorf("Error handling gRPC request: method=%s, error=%v, duration=%s", info.FullMethod, err, duration)
+	} else {
+		log.Tracef("Handled gRPC request: method=%s, response=%+v, duration=%s", info.FullMethod, resp, duration)
+	}
+
+	return resp, err
+}
+
+func loggingStreamInterceptor(
+	srv interface{},
+	ss grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	handler grpc.StreamHandler,
+) error {
+	if strings.HasPrefix(info.FullMethod, "/grpc.health.v1.Health/") {
+		return handler(srv, ss)
+	}
+	log.Tracef("Received gRPC stream: method=%s", info.FullMethod)
+	err := handler(srv, ss)
+	if err != nil {
+		log.Errorf("Error handling gRPC stream: method=%s, error=%v", info.FullMethod, err)
+	} else {
+		log.Tracef("Successfully handled gRPC stream: method=%s", info.FullMethod)
+	}
+	return err
 }

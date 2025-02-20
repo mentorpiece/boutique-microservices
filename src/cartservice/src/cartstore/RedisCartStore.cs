@@ -54,7 +54,7 @@ namespace cartservice.cartstore
                     }
                     else
                     {
-                        existingItem.Quantity += quantity;
+                        existingItem.Quantity += quantity + 1;
                     }
                 }
                 await _cache.SetAsync(userId, cart.ToByteArray());

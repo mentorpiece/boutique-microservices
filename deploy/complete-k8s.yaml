@@ -576,7 +576,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/boutique-cartservice:v0.1.0
+        image: gnado/boutique-cartservice:v0.1.1
         ports:
         - containerPort: 7070
         env:

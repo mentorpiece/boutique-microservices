@@ -430,7 +430,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gnado/boutique-paymentservice:v0.1.0
+        image: gnado/boutique-paymentservice:v0.1.1
         ports:
         - containerPort: 50051
         env:

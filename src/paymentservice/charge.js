@@ -42,7 +42,7 @@ class InvalidCreditCard extends CreditCardError {
 
 class UnacceptedCreditCard extends CreditCardError {
   constructor (cardType) {
-    super(`Sorry, we cannot process ${cardType} credit cards. Only VISA or MasterCard is accepted.`);
+    super(`Sorry, we cannot process ${cardType} credit cards. Only VISA, MasterCard or JCB is accepted.`);
   }
 }
 
